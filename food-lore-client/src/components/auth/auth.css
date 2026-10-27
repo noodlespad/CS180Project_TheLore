@@ -1,0 +1,50 @@
+/* Scoped to .fl-auth to avoid affecting teammates' styles. */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap');
+.fl-auth { --fl-green:#325d43; --fl-ink:#253a2c; --fl-muted:#818579; --fl-bg:#fbf9f3; --fl-line:#e8e7de; min-height:100vh; background:var(--fl-bg); color:var(--fl-ink); font:14px 'DM Sans',Arial,sans-serif; display:flex; flex-direction:column; }
+.fl-auth * { box-sizing:border-box; }
+.fl-auth button,.fl-auth input { font:inherit; }
+.fl-auth button { cursor:pointer; }
+.fl-auth .fl-header { min-height:66px; border-bottom:1px solid var(--fl-line); display:flex; align-items:center; justify-content:space-between; padding:0 clamp(25px,5.2vw,80px); gap:25px; }
+.fl-auth .fl-logo { color:var(--fl-ink); font:bold 24px 'Playfair Display',Georgia,serif; text-decoration:none; white-space:nowrap; }
+.fl-auth .fl-sprout { color:var(--fl-green); font:28px Georgia,serif; margin-right:6px; }
+.fl-auth .fl-primary-nav,.fl-auth .fl-account-nav { display:flex; align-items:center; gap:30px; }
+.fl-auth .fl-primary-nav a { color:var(--fl-muted); text-decoration:none; font-size:12px; }
+.fl-auth .fl-text-button,.fl-auth .fl-link-button { background:none; border:0; color:var(--fl-green); padding:0; font-weight:600; }
+.fl-auth .fl-text-button { color:var(--fl-ink); font-weight:400; }
+.fl-auth .fl-nav-cta { border:0; border-radius:6px; background:var(--fl-green); color:white; padding:12px 18px; font-weight:700; white-space:nowrap; }
+.fl-auth .fl-main { flex:1; width:min(1110px,calc(100% - 90px)); margin:30px auto; display:grid; grid-template-columns: minmax(0,1.15fr) minmax(350px,1fr); gap:clamp(55px,10vw,135px); align-items:center; }
+.fl-auth .fl-photo-panel { position:relative; min-height:570px; height:100%; max-height:650px; overflow:hidden; border-radius:18px; background:linear-gradient(0deg,rgba(14,39,24,.91),transparent 55%),url('https://images.unsplash.com/photo-1547592180-85f173990554?w=1400&auto=format&fit=crop&q=85') center/cover; }
+.fl-auth .fl-photo-badge { position:absolute; top:22px; left:22px; background:rgba(255,255,255,.94); color:var(--fl-green); padding:11px 15px; border-radius:30px; font-size:11px; font-weight:700; }
+.fl-auth .fl-photo-copy { position:absolute; bottom:30px; left:30px; right:30px; color:#fff; }
+.fl-auth .fl-photo-copy h2 { font:700 clamp(29px,3.3vw,38px)/1.17 'Playfair Display',Georgia,serif; margin:0 0 18px; }
+.fl-auth .fl-photo-copy p { color:rgba(255,255,255,.9); line-height:1.7; margin:0 0 16px; }
+.fl-auth .fl-photo-caption { display:flex; gap:24px; padding-top:13px; border-top:1px solid #ffffff40; font-size:10px; }
+.fl-auth .fl-form-column { width:100%; display:flex; justify-content:center; }
+.fl-auth .fl-form-inner { width:min(100%,360px); }
+.fl-auth .fl-eyebrow { color:var(--fl-green); font-size:10px; font-weight:700; letter-spacing:.03em; margin:0 0 12px; }
+.fl-auth h1 { font:700 clamp(34px,3.5vw,41px)/1.16 'Playfair Display',Georgia,serif; letter-spacing:-.5px; margin:0 0 11px; }
+.fl-auth .fl-description { font-size:13px; line-height:1.55; color:var(--fl-muted); margin:0 0 24px; }
+.fl-auth .fl-label { display:block; font-weight:700; font-size:11px; margin:16px 0 7px; }
+.fl-auth input:not([type='checkbox']) { width:100%; min-height:39px; border:1px solid #dedfd8; background:white; border-radius:6px; padding:9px 11px; color:var(--fl-ink); outline-offset:2px; }
+.fl-auth input::placeholder { color:#95988f; }
+.fl-auth input:focus-visible,.fl-auth button:focus-visible,.fl-auth a:focus-visible { outline:2px solid #759b79; outline-offset:2px; }
+.fl-auth .fl-password-wrap { position:relative; }
+.fl-auth .fl-password-wrap input { padding-right:65px; }
+.fl-auth .fl-eye { position:absolute; right:11px; top:50%; transform:translateY(-50%); background:none; border:none; color:var(--fl-green); font-size:11px; font-weight:700; }
+.fl-auth .fl-options-row { display:flex; justify-content:space-between; gap:10px; align-items:center; margin:17px 0; }
+.fl-auth .fl-checkbox { display:flex; align-items:flex-start; gap:7px; font-size:11px; color:var(--fl-muted); line-height:1.5; cursor:pointer; }
+.fl-auth .fl-checkbox input { accent-color:var(--fl-green); margin:2px 0 0; }
+.fl-auth .fl-link-button { font-size:11px; }
+.fl-auth .fl-submit { display:block; width:100%; border:0; border-radius:6px; background:var(--fl-green); color:white; min-height:39px; font-weight:700; margin-top:15px; }
+.fl-auth .fl-submit:disabled { opacity:.6; cursor:wait; }
+.fl-auth .fl-switch { text-align:center; font-size:11px; color:var(--fl-muted); margin:22px 0; }
+.fl-auth .fl-explore { border-top:1px solid var(--fl-line); padding:20px 0; text-align:center; display:flex; flex-direction:column; gap:7px; color:var(--fl-muted); font-size:10px; }
+.fl-auth .fl-explore a { color:var(--fl-green); font-weight:700; text-decoration:none; }
+.fl-auth .fl-hint { color:var(--fl-muted); font-size:10px; margin:5px 0 0; }
+.fl-auth .fl-terms { margin:17px 0 14px; }
+.fl-auth .fl-error { color:#9d3030; font-size:12px; line-height:1.5; margin:10px 0; }
+.fl-auth .fl-footer { border-top:1px solid var(--fl-line); min-height:88px; display:flex; justify-content:space-between; align-items:center; padding:18px clamp(25px,5.2vw,80px); gap:20px; }
+.fl-auth .fl-footer strong { font:700 19px 'Playfair Display',Georgia,serif; color:var(--fl-green); }
+.fl-auth .fl-footer p,.fl-auth .fl-footer span { color:var(--fl-muted); font-size:10px; margin:5px 0 0; }
+@media (max-width:800px) { .fl-auth .fl-main { width:min(500px,calc(100% - 40px)); grid-template-columns:1fr; gap:25px; margin:28px auto; } .fl-auth .fl-photo-panel { min-height:280px; } .fl-auth .fl-photo-copy h2 { font-size:27px; } .fl-auth .fl-primary-nav { display:none; } .fl-auth .fl-form-inner { width:100%; } }
+@media (max-width:480px) { .fl-auth .fl-header { padding:12px 20px; } .fl-auth .fl-logo { font-size:20px; } .fl-auth .fl-account-nav { gap:12px; } .fl-auth .fl-nav-cta { padding:10px; font-size:11px; } .fl-auth .fl-photo-panel { min-height:245px; } .fl-auth .fl-photo-copy { left:20px; right:20px; bottom:18px; } .fl-auth .fl-photo-copy p { font-size:11px; } .fl-auth .fl-footer { align-items:flex-start; flex-direction:column; } }
