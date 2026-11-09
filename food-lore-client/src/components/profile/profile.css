@@ -1,0 +1,448 @@
+.profile-app {
+  min-height: 100vh;
+  background: #f8f6ef;
+  color: #2f4737;
+}
+
+.profile-header {
+  height: 76px;
+  padding: 0 6%;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  border-bottom: 1px solid #deddd6;
+  background: #f8f6ef;
+}
+
+.profile-brand {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  text-decoration: none;
+  color: #2f4737;
+  font-family: Georgia, serif;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.profile-brand-icon {
+  font-family: Arial, sans-serif;
+  font-size: 20px;
+}
+
+.profile-nav {
+  display: flex;
+  gap: 38px;
+}
+
+.profile-nav a,
+.profile-links a {
+  color: #747a73;
+  text-decoration: none;
+  font-size: 13px;
+}
+
+.profile-user {
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  font-size: 13px;
+}
+
+.header-avatar,
+.profile-avatar,
+.recipe-avatar {
+  background: #f5e4da;
+  color: #bd674d;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-avatar {
+  width: 34px;
+  height: 34px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.profile-chevron {
+  color: #8b8d87;
+}
+
+.profile-shell {
+  width: min(1180px, 89%);
+  margin: 0 auto;
+  padding: 30px 0 48px;
+}
+
+.profile-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.profile-eyebrow {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.profile-links {
+  display: flex;
+  gap: 23px;
+}
+
+.profile-card {
+  background: #e6ecdf;
+  border-radius: 20px;
+  padding: 42px 35px;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.profile-avatar {
+  width: 94px;
+  height: 94px;
+  flex: 0 0 94px;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.profile-details {
+  flex: 1;
+}
+
+.profile-name {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+}
+
+.profile-name h1 {
+  margin: 0;
+  font-family: Georgia, serif;
+  font-size: 37px;
+  font-weight: 500;
+}
+
+.profile-name span {
+  color: #7b817b;
+  font-size: 12px;
+}
+
+.profile-details > p {
+  max-width: 640px;
+  margin: 13px 0;
+  line-height: 1.6;
+  font-size: 14px;
+  color: #536259;
+}
+
+.profile-member {
+  color: #80857f;
+  font-size: 11px;
+}
+
+.edit-profile-button {
+  padding: 11px 18px;
+  background: #faf9f4;
+  color: #345641;
+  border: 1px solid #d4d8ce;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+.profile-stats {
+  margin: 27px 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.stat-card {
+  min-height: 82px;
+  padding: 0 21px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background: white;
+  border: 1px solid #deddd6;
+  border-radius: 11px;
+}
+
+.stat-icon {
+  width: 39px;
+  height: 39px;
+  border-radius: 50%;
+  background: #e8eee4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stat-card strong {
+  display: block;
+  font-family: Georgia, serif;
+  font-size: 25px;
+}
+
+.stat-card p {
+  margin: 2px 0 0;
+  color: #797e78;
+  font-size: 11px;
+}
+
+.profile-tabs-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #dddcd5;
+  padding-bottom: 12px;
+}
+
+.profile-tabs {
+  display: flex;
+  gap: 32px;
+}
+
+.profile-tab {
+  border: 0;
+  padding: 8px 0;
+  background: transparent;
+  color: #80817b;
+  cursor: pointer;
+}
+
+.profile-tab.active {
+  color: #355943;
+  font-weight: 600;
+  border-bottom: 2px solid #355943;
+}
+
+.post-recipe-button {
+  border: 0;
+  border-radius: 7px;
+  padding: 12px 20px;
+  background: #315b40;
+  color: white;
+  cursor: pointer;
+}
+
+.profile-section-heading {
+  margin: 27px 0 20px;
+}
+
+.profile-section-heading h2 {
+  margin: 0;
+  font-family: Georgia, serif;
+  font-size: 28px;
+  font-weight: 500;
+}
+
+.profile-section-heading p {
+  margin: 7px 0 0;
+  color: #858982;
+  font-size: 12px;
+}
+
+.profile-recipe-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+
+.profile-recipe-card {
+  overflow: hidden;
+  border: 1px solid #deddd6;
+  border-radius: 13px;
+  background: white;
+}
+
+.profile-recipe-image {
+  height: 185px;
+  position: relative;
+}
+
+.profile-recipe-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-recipe-tag {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 6px 11px;
+  background: #faf9f2;
+  border-radius: 16px;
+  font-size: 10px;
+}
+
+.profile-recipe-menu {
+  position: absolute;
+  top: 11px;
+  right: 11px;
+  width: 32px;
+  height: 32px;
+  background: white;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.profile-recipe-body {
+  padding: 17px;
+}
+
+.profile-recipe-body h3 {
+  margin: 0;
+  font-family: Georgia, serif;
+  font-size: 19px;
+  font-weight: 500;
+}
+
+.profile-recipe-description {
+  min-height: 35px;
+  margin: 20px 0 12px;
+  color: #878a84;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.profile-recipe-meta {
+  padding-bottom: 11px;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #ebeae4;
+  color: #6f766f;
+  font-size: 10px;
+}
+
+.profile-recipe-footer {
+  padding-top: 11px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #727972;
+  font-size: 10px;
+}
+
+.profile-recipe-author {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.recipe-avatar {
+  width: 23px;
+  height: 23px;
+  font-size: 7px;
+  font-weight: 700;
+}
+
+.draft-card {
+  margin-top: 28px;
+  padding: 19px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f7e6dc;
+  border-radius: 14px;
+}
+
+.draft-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.draft-icon {
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fffaf6;
+  border-radius: 50%;
+}
+
+.draft-info strong {
+  font-family: Georgia, serif;
+  font-size: 15px;
+}
+
+.draft-info p {
+  margin: 5px 0 0;
+  color: #81817d;
+  font-size: 10px;
+}
+
+.continue-button {
+  padding: 10px 17px;
+  background: #faf9f4;
+  color: #315b40;
+  border: 1px solid #ddd8ce;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+.profile-footer {
+  padding: 32px 6%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-top: 1px solid #deddd6;
+}
+
+.profile-footer strong {
+  font-family: Georgia, serif;
+  font-size: 20px;
+}
+
+.profile-footer p,
+.profile-footer > span {
+  color: #858781;
+  font-size: 10px;
+}
+
+@media (max-width: 850px) {
+  .profile-header {
+    grid-template-columns: 1fr auto;
+  }
+
+  .profile-nav {
+    display: none;
+  }
+
+  .profile-card {
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  .profile-stats,
+  .profile-recipe-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-tabs-row {
+    align-items: flex-start;
+    gap: 15px;
+    flex-direction: column;
+  }
+
+  .profile-tabs {
+    flex-wrap: wrap;
+  }
+
+  .profile-footer {
+    gap: 25px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
