@@ -1,0 +1,213 @@
+/* src/components/cart/cart.css */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap');
+
+/* =========================================
+   1. VARIABLES & BASE PAGE LAYOUT
+========================================= */
+.fl-cart {
+  --fl-green: #325d43;
+  --fl-ink: #253a2c;
+  --fl-muted: #818579;
+  --fl-bg: #fbf9f3;
+  --fl-line: #e8e7de;
+  
+  color: var(--fl-ink);
+  font-family: 'DM Sans', Arial, sans-serif;
+  padding: 40px clamp(25px, 5.2vw, 80px);
+  max-width: 1200px;
+  margin: 0 auto;
+  background: var(--fl-bg);
+  min-height: 100vh;
+}
+
+.fl-cart-page { background-color: var(--fl-bg); min-height: 100vh; width: 100%; }
+.fl-cart * { box-sizing: border-box; }
+
+.fl-cart-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.8fr) minmax(280px, 320px);
+  gap: clamp(40px, 5vw, 60px);
+  align-items: start;
+}
+
+@media (max-width: 800px) {
+  .fl-cart-layout { grid-template-columns: 1fr; gap: 40px; }
+  .fl-success-banner { flex-direction: column; align-items: flex-start; gap: 16px; }
+}
+
+/* =========================================
+   2. SHARED TYPOGRAPHY & COLORS
+========================================= */
+/* Playfair Serif Headers */
+.fl-cart h1, .fl-header-row h2, .fl-recipe-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 700;
+  color: var(--fl-ink);
+  margin: 0;
+}
+.fl-cart h1 { font-size: clamp(34px, 3.5vw, 41px); line-height: 1.16; letter-spacing: -.5px; margin-bottom: 8px; }
+.fl-header-row h2 { font-size: 28px; }
+.fl-recipe-title { font-size: 26px; line-height: 1.2; }
+
+/* Small Muted Text */
+.fl-subtitle, .fl-item-count, .fl-item-optional, .fl-edit-helper, 
+.fl-recipe-meta, .fl-recipe-note, .fl-action-text, .fl-list-footer-note, .fl-banner-subtitle {
+  color: var(--fl-muted);
+  font-size: 13px;
+}
+
+/* Tiny Uppercase Green Labels */
+.fl-edit-label, .fl-form-label, .fl-recipe-label {
+  font-size: 12px; /* recipe-label gets slightly smaller below */
+  font-weight: 700;
+  color: var(--fl-green);
+}
+.fl-recipe-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+
+/* =========================================
+   3. SHARED COMPONENTS (Cards, Inputs, Buttons)
+========================================= */
+/* White Bordered Cards */
+.fl-list-card, .fl-sidebar-card {
+  background-color: white;
+  border: 1px solid var(--fl-line);
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+}
+.fl-list-card { padding: 32px; }
+.fl-sidebar-card { padding: 24px; }
+
+/* Text Inputs */
+.fl-edit-input-large, .fl-form-input {
+  padding: 10px 12px;
+  border: 1px solid var(--fl-line);
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: inherit;
+  width: 100%;
+}
+.fl-edit-input-large { border-color: var(--fl-ink); width: auto; }
+.fl-edit-input-large:focus, .fl-form-input:focus {
+  outline: 2px solid #759b79;
+  outline-offset: -1px;
+  border-color: transparent;
+}
+
+/* Primary Green Buttons */
+.fl-btn-save, .fl-form-submit {
+  background-color: var(--fl-green);
+  color: white;
+  border: none;
+  font-weight: 700;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.fl-form-submit { width: 100%; padding: 12px; font-size: 14px; margin-top: 8px; }
+.fl-btn-save:hover, .fl-form-submit:hover { background-color: #254a33; }
+
+/* Transparent Icon/Link Buttons */
+.fl-action-btn, .fl-edit-trash, .fl-banner-link, .fl-view-recipe {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+}
+.fl-action-btn, .fl-edit-trash { color: var(--fl-muted); }
+.fl-action-btn { font-size: 12px; gap: 4px; }
+.fl-action-btn:hover { color: var(--fl-ink); }
+.fl-banner-link, .fl-view-recipe { gap: 6px; font-size: 14px; font-weight: 700; color: var(--fl-green); }
+.fl-view-recipe { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; margin-top: 8px; }
+.fl-banner-link:hover, .fl-view-recipe:hover { color: var(--fl-ink); }
+
+/* =========================================
+   4. LAYOUT SPECIFICS (Left List)
+========================================= */
+.fl-list-header { margin-bottom: 30px; }
+.fl-header-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
+
+/* Progress Bar */
+.fl-progress-text { font-size: 11px; font-weight: 700; color: var(--fl-ink); }
+.fl-progress-track { width: 100%; height: 4px; background-color: var(--fl-line); border-radius: 2px; overflow: hidden; margin-bottom: 25px; }
+.fl-progress-fill { height: 100%; background-color: var(--fl-green); border-radius: 2px; }
+
+/* Table Headers */
+.fl-column-headers { display: flex; margin-bottom: 15px; }
+.fl-column-headers span { font-size: 10px; font-weight: 700; color: var(--fl-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+.fl-label-buy { flex: 1; }
+.fl-label-qty { width: 100px; margin-right: 90px; }
+
+/* List Items */
+.fl-recipe-group { margin-bottom: 35px; }
+.fl-recipe-group h3 { font-size: 14px; font-weight: 700; border-bottom: 1px solid var(--fl-line); padding-bottom: 10px; margin-bottom: 15px; }
+.fl-cart-item { display: flex; align-items: center; gap: 15px; padding: 16px 0; border-bottom: 1px solid var(--fl-line); }
+.fl-cart-item:last-child { border-bottom: none; }
+.fl-cart-item input[type="checkbox"] { accent-color: var(--fl-green); width: 16px; height: 16px; cursor: pointer; }
+.fl-cart-item-name { flex: 1; font-size: 14px; font-weight: 400; }
+.fl-cart-item-qty { color: var(--fl-ink); font-size: 14px; font-weight: 400; width: 90px; }
+.fl-item-actions { display: flex; gap: 12px; align-items: center; margin-left: 20px; }
+
+/* Edit Block */
+.fl-edit-block { background-color: #eef2ec; border-radius: 8px; padding: 16px; margin: 10px 0; display: flex; flex-direction: column; gap: 16px; }
+.fl-edit-header { font-size: 14px; font-weight: 700; color: var(--fl-green); display: flex; align-items: center; gap: 8px; }
+.fl-edit-fields { display: flex; gap: 16px; align-items: flex-end; }
+.fl-edit-field-group { display: flex; flex-direction: column; gap: 6px; }
+.fl-edit-field-group.name { flex: 1; }
+.fl-edit-field-group.qty { width: 140px; }
+.fl-edit-trash { font-size: 16px; padding-bottom: 10px; }
+.fl-edit-footer { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 8px; }
+.fl-edit-actions { display: flex; gap: 12px; }
+
+.fl-btn-cancel, .fl-btn-secondary { background-color: var(--fl-bg); color: var(--fl-ink); border: 1px solid var(--fl-line); border-radius: 6px; padding: 10px 16px; font-weight: 700; cursor: pointer; transition: background-color 0.2s; }
+.fl-btn-secondary { font-size: 13px; text-align: center; padding: 10px; }
+.fl-btn-cancel:hover, .fl-btn-secondary:hover { background-color: #e8e7de; }
+
+/* Purchased Section */
+.fl-purchased-group { margin-top: 30px; border-top: 1px solid var(--fl-line); padding-top: 24px; }
+.fl-purchased-header { font-size: 14px; font-weight: 700; color: var(--fl-green); display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+.fl-cart-item-checked .fl-cart-item-name, .fl-cart-item-checked .fl-cart-item-qty { text-decoration: line-through; color: var(--fl-muted); }
+.fl-list-footer-note { margin-top: 30px; padding-top: 24px; border-top: 1px solid var(--fl-line); }
+
+/* =========================================
+   5. LAYOUT SPECIFICS (Right Sidebar)
+========================================= */
+.fl-cart-sidebar { display: flex; flex-direction: column; gap: 24px; }
+.fl-recipe-card, .fl-add-item-form, .fl-action-card { display: flex; flex-direction: column; gap: 16px; }
+.fl-action-card { gap: 12px; }
+
+.fl-recipe-image {
+  margin: -24px -24px 16px -24px; 
+  width: calc(100% + 48px);
+  height: 200px;
+  object-fit: cover;
+  border-radius: 16px 16px 0 0;
+  background-color: var(--fl-bg);
+}
+
+.fl-form-title, .fl-action-title { font-weight: 700; color: var(--fl-ink); margin: 0; }
+.fl-form-title { font-size: 16px; margin-bottom: 4px; }
+.fl-action-title { font-size: 14px; }
+.fl-form-group { display: flex; flex-direction: column; gap: 6px; }
+
+/* Cupboard Card Override */
+.fl-cupboard-card { background-color: #f4eae1; border: none; }
+
+/* =========================================
+   6. SUCCESS BANNER
+========================================= */
+.fl-success-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #e8f0eb;
+  padding: 20px 24px;
+  border-radius: 12px;
+  margin-bottom: 40px;
+}
+.fl-banner-left { display: flex; align-items: center; gap: 16px; }
+.fl-banner-icon { font-size: 24px; color: var(--fl-green); display: flex; align-items: center; justify-content: center; }
+.fl-banner-text { display: flex; flex-direction: column; gap: 4px; }
+.fl-banner-title { font-size: 14px; font-weight: 700; color: var(--fl-green); margin: 0; }
