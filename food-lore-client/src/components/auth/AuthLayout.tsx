@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import './auth.css';
+import '@/app/globals.css';
 
 type AuthLayoutProps = {
   children: ReactNode;
@@ -12,9 +13,16 @@ export default function AuthLayout({ children, currentPage, onLoginClick, onSign
   return (
     <div className="fl-auth">
       <header className="fl-header">
-        <a className="fl-logo" href="/" aria-label="Food Lore home"><span className="fl-sprout" aria-hidden="true">♧</span> food lore.</a>
-        <nav className="fl-primary-nav" aria-label="Main navigation">
+         <div className="brand-group">
+          <span className="brand-mark" aria-hidden="true">
+            ♡
+          </span>
+          <span className="brand-name">food lore.</span>
+        </div>
+        
+        <nav className="top-nav" aria-label="Main navigation">
           <a href="/recipes">Explore recipes</a>
+          <a href="/recipes">Shopping List</a>
           <a href="/recipes/new">Post a recipe</a>
         </nav>
         <nav className="fl-account-nav" aria-label="Account navigation">
@@ -25,7 +33,7 @@ export default function AuthLayout({ children, currentPage, onLoginClick, onSign
 
       <main className="fl-main">
         <section className="fl-photo-panel" aria-label="Food shared around a table">
-          <div className="fl-photo-badge">♧ &nbsp; Your seat at the table</div>
+          <div className="fl-photo-badge">♡ &nbsp; Your seat at the table</div>
           <div className="fl-photo-copy">
             <h2>Good food starts with a little confidence.</h2>
             <p>Find your next easy dinner. Share your first kitchen win. Learn a little from each other.</p>

@@ -47,15 +47,18 @@ const profileRecipes: ProfileRecipe[] = [
 
 export default function ProfilePage() {
   return (
-    <div className="profile-app">
-      <header className="profile-header">
-        <a className="profile-brand" href="/">
-          <span className="profile-brand-icon">♡</span>
-          <span>food lore.</span>
-        </a>
+    <div className="foodlore-app">
+      <header className="foodlore-header">
+        <div className="brand-group">
+          <span className="brand-mark" aria-hidden="true">
+            ♡
+          </span>
+          <span className="brand-name">food lore.</span>
+        </div>
 
-        <nav className="profile-nav" aria-label="Main navigation">
-          <a href="/">Explore recipes</a>
+        <nav className="top-nav" aria-label="Main navigation">
+          <a href="#">Explore recipes</a>
+          <a href="/recipes">Shopping List</a>
           <a href="#">Post a recipe</a>
         </nav>
 
@@ -102,7 +105,7 @@ export default function ProfilePage() {
 
         <section className="profile-stats">
           <article className="stat-card">
-            <span className="stat-icon">✎</span>
+            <span className="stat-icon">⌯⌲</span>
 
             <div>
               <strong>3</strong>
@@ -111,7 +114,7 @@ export default function ProfilePage() {
           </article>
 
           <article className="stat-card">
-            <span className="stat-icon">◯</span>
+            <span className="stat-icon">✎</span>
 
             <div>
               <strong>23</strong>

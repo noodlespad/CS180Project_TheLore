@@ -4,32 +4,6 @@
   color: #2f4737;
 }
 
-.profile-header {
-  height: 76px;
-  padding: 0 6%;
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
-  border-bottom: 1px solid #deddd6;
-  background: #f8f6ef;
-}
-
-.profile-brand {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  text-decoration: none;
-  color: #2f4737;
-  font-family: Georgia, serif;
-  font-size: 24px;
-  font-weight: 600;
-}
-
-.profile-brand-icon {
-  font-family: Arial, sans-serif;
-  font-size: 20px;
-}
-
 .profile-nav {
   display: flex;
   gap: 38px;
@@ -103,6 +77,8 @@
   display: flex;
   align-items: center;
   gap: 28px;
+  background-color: #ecf1e8;
+  border: 1px solid rgba(57, 80, 66, 0.08);
 }
 
 .profile-avatar {

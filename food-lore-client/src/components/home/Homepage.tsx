@@ -138,6 +138,7 @@ export default function HomePage() {
 
         <nav className="top-nav" aria-label="Main navigation">
           <a href="#">Explore recipes</a>
+          <a href="/recipes">Shopping List</a>
           <a href="#">Post a recipe</a>
         </nav>
 

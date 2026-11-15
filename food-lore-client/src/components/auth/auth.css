@@ -1,6 +1,6 @@
 /* Scoped to .fl-auth to avoid affecting teammates' styles. */
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap');
-.fl-auth { --fl-green:#325d43; --fl-ink:#253a2c; --fl-muted:#818579; --fl-bg:#fbf9f3; --fl-line:#e8e7de; min-height:100vh; background:var(--fl-bg); color:var(--fl-ink); font:14px 'DM Sans',Arial,sans-serif; display:flex; flex-direction:column; }
+.fl-auth { --green-2: #1a3a31;--fl-green:hsl(144, 30%, 28%); --fl-ink:#253a2c; --fl-muted:#818579; --fl-bg:#fbf9f3; --fl-line:#e8e7de; min-height:100vh; background:var(--fl-bg); color:var(--fl-ink); font:14px 'DM Sans',Arial,sans-serif; display:flex; flex-direction:column; }
 .fl-auth * { box-sizing:border-box; }
 .fl-auth button,.fl-auth input { font:inherit; }
 .fl-auth button { cursor:pointer; }
