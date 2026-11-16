@@ -1,5 +1,7 @@
 "use client";
 import { useState, type FormEvent } from 'react';
+import { useRouter } from 'next/navigation';
+import { postAuth } from '@/src/components/lib/auth-client';
 import AuthLayout from './AuthLayout';
 
 export type LoginValues = { email: string; password: string; rememberMe: boolean };
@@ -10,6 +12,7 @@ export type LoginProps = {
 };
 
 export default function Login({ onLogin, onSignupClick, onForgotPasswordClick }: LoginProps) {
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(true);
@@ -20,13 +23,16 @@ export default function Login({ onLogin, onSignupClick, onForgotPasswordClick }:
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError('');
-    if (!onLogin) {
-      setError('Login is not connected yet. Ask your team to connect the authentication service.');
-      return;
-    }
     setBusy(true);
     try {
-      await onLogin({ email: email.trim(), password, rememberMe });
+      const values = { email: email.trim(), password, rememberMe };
+      if (onLogin) {
+        await onLogin(values);
+      } else {
+        await postAuth('/api/auth/login', values);
+        router.replace('/');
+        router.refresh();
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unable to log in. Please try again.');
     } finally {
@@ -35,7 +41,11 @@ export default function Login({ onLogin, onSignupClick, onForgotPasswordClick }:
   }
 
   return (
-    <AuthLayout currentPage="login" onSignupClick={onSignupClick} onLoginClick={() => undefined}>
+    <AuthLayout
+      currentPage="login"
+      onSignupClick={onSignupClick ?? (() => router.push('/signup'))}
+      onLoginClick={() => router.push('/login')}
+    >
       <div className="fl-form-inner">
         <p className="fl-eyebrow">GOOD TO HAVE YOU BACK</p>
         <h1>Welcome to the<br />table.</h1>
@@ -55,7 +65,7 @@ export default function Login({ onLogin, onSignupClick, onForgotPasswordClick }:
           {error && <p role="alert" className="fl-error">{error}</p>}
           <button className="fl-submit" type="submit" disabled={busy}>{busy ? 'Logging in…' : '→   Log in'}</button>
         </form>
-        <p className="fl-switch">New around here? <button type="button" className="fl-link-button" onClick={onSignupClick}>Create an account</button></p>
+        <p className="fl-switch">New around here? <button type="button" className="fl-link-button" onClick={onSignupClick ?? (() => router.push('/signup'))}>Create an account</button></p>
         <div className="fl-explore"><span>Just looking for dinner? You're welcome here too.</span><a href="/recipes">Explore recipes without an account →</a></div>
       </div>
     </AuthLayout>

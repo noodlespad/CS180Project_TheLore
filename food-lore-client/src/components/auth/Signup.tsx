@@ -2,7 +2,18 @@
 import { useState, type FormEvent } from 'react';
 import AuthLayout from './AuthLayout';
 
-export type SignupValues = { displayName: string; username: string; email: string; password: string };
+import { useRouter } from 'next/navigation';
+import { postAuth } from '@/src/components/lib/auth-client';
+
+
+export type SignupValues = { 
+  displayName: string; 
+  email: string; 
+  password: string; 
+  agreedToTerms: boolean;
+};
+
+
 export type SignupProps = {
   onSignup?: (values: SignupValues) => void | Promise<void>;
   onLoginClick?: () => void;
@@ -10,7 +21,6 @@ export type SignupProps = {
 
 export default function Signup({ onSignup, onLoginClick }: SignupProps) {
   const [displayName, setDisplayName] = useState('');
-  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmation, setConfirmation] = useState('');
@@ -18,31 +28,51 @@ export default function Signup({ onSignup, onLoginClick }: SignupProps) {
   const [agreed, setAgreed] = useState(false);
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
+  const router = useRouter();
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError('');
-    if (!/^[a-zA-Z0-9_]{3,24}$/.test(username)) {
-      setError('Username must be 3–24 characters using letters, numbers, or underscores.');
-      return;
-    }
     if (password.length < 8 || !/\d/.test(password)) {
       setError('Password must have at least 8 characters and one number.');
       return;
     }
     if (password !== confirmation) { setError('Passwords do not match.'); return; }
     if (!agreed) { setError('Please agree to the terms to create an account.'); return; }
-    if (!onSignup) { setError('Sign-up is not connected yet. Ask your team to connect the authentication service.'); return; }
     setBusy(true);
-    try {
-      await onSignup({ displayName: displayName.trim(), username, email: email.trim(), password });
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unable to create an account. Please try again.');
-    } finally { setBusy(false); }
+
+try {
+  const values = {
+    displayName: displayName.trim(),
+    email: email.trim(),
+    password,
+    agreedToTerms: agreed
+  };
+
+  if (onSignup) {
+    await onSignup(values);
+  } else {
+    await postAuth('/api/auth/signup', values);
+    router.replace('/');
+    router.refresh();
+  }
+} catch (err) {
+  setError(
+    err instanceof Error
+      ? err.message
+      : 'Unable to create an account. Please try again.'
+  );
+} finally {
+  setBusy(false);
+}
   }
 
   return (
-    <AuthLayout currentPage="signup" onSignupClick={() => undefined} onLoginClick={onLoginClick}>
+      <AuthLayout
+      currentPage="signup"
+      onSignupClick={() => router.push('/signup')}
+      onLoginClick={onLoginClick ?? (() => router.push('/login'))}
+      >
       <div className="fl-form-inner fl-signup-form">
         <p className="fl-eyebrow">THERE'S ROOM FOR YOU HERE</p>
         <h1>Join the table.</h1>
@@ -50,9 +80,6 @@ export default function Signup({ onSignup, onLoginClick }: SignupProps) {
         <form onSubmit={handleSubmit}>
           <label className="fl-label" htmlFor="fl-signup-name">Display name</label>
           <input id="fl-signup-name" value={displayName} onChange={e => setDisplayName(e.target.value)} autoComplete="name" placeholder="Maya Chen" required />
-          <label className="fl-label" htmlFor="fl-signup-username">Username</label>
-          <input id="fl-signup-username" value={username} onChange={e => setUsername(e.target.value)} autoComplete="username" placeholder="mayacooks" minLength={3} maxLength={24} required />
-          <p className="fl-hint">This is how your community will find you.</p>
           <label className="fl-label" htmlFor="fl-signup-email">Email address</label>
           <input id="fl-signup-email" type="email" value={email} onChange={e => setEmail(e.target.value)} autoComplete="email" placeholder="maya@university.edu" required />
           <label className="fl-label" htmlFor="fl-signup-password">Password</label>
@@ -67,7 +94,7 @@ export default function Signup({ onSignup, onLoginClick }: SignupProps) {
           {error && <p role="alert" className="fl-error">{error}</p>}
           <button className="fl-submit" type="submit" disabled={busy}>{busy ? 'Creating account…' : '→   Create my account'}</button>
         </form>
-        <p className="fl-switch">Already part of the community? <button type="button" className="fl-link-button" onClick={onLoginClick}>Log in</button></p>
+        <p className="fl-switch">Already part of the community? <button type="button" className="fl-link-button" onClick={onLoginClick ?? (() => router.push('/login'))}>Log in</button></p>
       </div>
     </AuthLayout>
   );

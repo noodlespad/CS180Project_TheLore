@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import Link from 'next/link';
 
 type Recipe = {
   id: number;
@@ -143,12 +144,12 @@ export default function HomePage() {
         </nav>
 
         <div className="header-actions">
-          <button type="button" className="ghost-btn">
+          <Link href="/login" className="ghost-btn">
             Log in
-          </button>
-          <button type="button" className="dark-btn">
+          </Link>
+          <Link href="/signup" className="dark-btn">
             Join the table
-          </button>
+          </Link>
         </div>
       </header>
 

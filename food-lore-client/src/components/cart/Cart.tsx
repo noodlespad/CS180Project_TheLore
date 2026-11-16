@@ -1,6 +1,7 @@
 "use client";
 import './cart.css';
 import Image from 'next/image';
+import Link from 'next/link';
 import recipeImg from '/public/pasta-recipe.jpg';
 
 
@@ -24,12 +25,12 @@ return(
         </nav>
 
         <div className="header-actions">
-            <button type="button" className="ghost-btn">
+            <Link href="/login" className="ghost-btn">
             Log in
-            </button>
-            <button type="button" className="dark-btn">
+            </Link>
+            <Link href="/signup" className="dark-btn">
             Join the table
-            </button>
+            </Link>
         </div>
         </header>
         </div>
