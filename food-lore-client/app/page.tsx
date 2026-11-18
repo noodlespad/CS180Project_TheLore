@@ -137,7 +137,7 @@ export default function HomePage() {
         </div>
 
         <nav className="top-nav" aria-label="Main navigation">
-          <a href="#">Explore recipes</a>
+          <a href="/recipe">Explore recipes</a>
           <a href="#">Post a recipe</a>
         </nav>
 
