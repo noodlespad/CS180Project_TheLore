@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import './auth.css';
 import '@/app/globals.css';
+import Link from 'next/dist/client/link';
 
 type AuthLayoutProps = {
   children: ReactNode;
@@ -21,9 +22,10 @@ export default function AuthLayout({ children, currentPage, onLoginClick, onSign
         </div>
         
         <nav className="top-nav" aria-label="Main navigation">
-          <a href="/recipes">Explore recipes</a>
-          <a href="/recipes">Shopping List</a>
-          <a href="/recipes/new">Post a recipe</a>
+          <Link href="/">Explore recipes</Link>
+          <Link href="/favorites">Favorites</Link>
+          <Link href="/shopping-list">Shopping List</Link>
+          <Link href="/recipes/new">Post a recipe</Link>
         </nav>
         <nav className="fl-account-nav" aria-label="Account navigation">
           <button type="button" className={currentPage === 'login' ? 'fl-text-button fl-current' : 'fl-text-button'} onClick={onLoginClick} aria-current={currentPage === 'login' ? 'page' : undefined}>Log in</button>

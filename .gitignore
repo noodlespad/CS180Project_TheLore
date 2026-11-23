@@ -1,3 +1,4 @@
 .neon
 .env*
 .AGENTS
+node_modules
