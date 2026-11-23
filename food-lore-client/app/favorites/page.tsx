@@ -4,6 +4,7 @@ import Link from 'next/link';
 import './favorites.css';
 import { useEffect, useState } from 'react';
 
+
 type Recipe = {
   id: string;
   title: string;
@@ -52,6 +53,11 @@ export default function FavoritesPage() {
         ) : (
           <div className="recipe-grid">
             {favorites.map((recipe) => (
+                <Link
+                    key={recipe.id}
+                    href={`/recipes/${recipe.id}`}
+                    className="recipe-card-link"
+                >
               <article key={recipe.id} className="recipe-card">
                 <div className="recipe-photo">
                   <img
@@ -76,6 +82,7 @@ export default function FavoritesPage() {
                   </div>
                 </div>
               </article>
+              </Link>
             ))}
           </div>
         )}

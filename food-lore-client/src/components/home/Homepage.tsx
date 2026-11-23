@@ -21,57 +21,92 @@ const kitchenIngredients = ['Eggs', 'Rice', 'Pasta', 'Spinach', 'Beans', 'Cheese
   export default function HomePage() {
   const [query, setQuery] = useState('');
   const [recipes, setRecipes] = useState<Recipe[]>([]);
-  const [activeFilter, setActiveFilter] = useState('All recipes');
+  const [activeFilter, setActiveFilter] = useState<string | null>('All recipes');
   const [selectedIngredient, setSelectedIngredient] = useState<string | null>(null);
   const [favoriteIds, setFavoriteIds] = useState<string[]>([]);
+  const [sortOrder, setSortOrder] = useState<'az' | 'za'>('az');
 
-  async function handleSearch(searchValue = query) {
-    if (!searchValue.trim()) return;
+  async function handleCategory(category: string) {
+  setActiveFilter(category);
+  setSelectedIngredient(null);
 
-    try {
-      const response = await fetch(
-        `/api/recipes/search?q=${encodeURIComponent(searchValue)}`
-      );
-
-      if (!response.ok) {
-        throw new Error('Recipe search failed');
-      }
-
-      const data = await response.json();
-
-      const formattedRecipes = data.recipes.map((recipe: any) => ({
-        id: recipe.id,
-        title: recipe.title,
-        image: recipe.image,
-        tag: recipe.category ?? 'Recipe',
-        cuisine: recipe.cuisine ?? 'Unknown cuisine',
-      }));
-
-      setRecipes(formattedRecipes);
-    } catch (error) {
-      console.error('Search error:', error);
-    }
+  if (category === 'All recipes') {
+    return;
   }
 
+  const response = await fetch(
+    `/api/recipes/search?category=${encodeURIComponent(category)}`
+  );
+
+  const data = await response.json();
+
+  setRecipes(
+    data.recipes.map((recipe: any) => ({
+      id: recipe.id,
+      title: recipe.title,
+      image: recipe.image,
+      tag: recipe.category ?? category,
+      cuisine: recipe.cuisine ?? 'Unknown cuisine',
+    }))
+  );
+}
+
+  async function handleSearch(searchValue = query) {
+  if (!searchValue.trim()) return;
+
+  const response = await fetch(
+    `/api/recipes/search?q=${encodeURIComponent(searchValue)}`
+  );
+
+  const data = await response.json();
+
+  setRecipes(
+    data.recipes.map((recipe: any) => ({
+      id: recipe.id,
+      title: recipe.title,
+      image: recipe.image,
+      tag: recipe.category ?? 'Recipe',
+      cuisine: recipe.cuisine ?? 'Unknown cuisine',
+    }))
+  );
+}
+
+  async function handleIngredientSearch(ingredient: string) {
+  const response = await fetch(
+    `/api/recipes/search?ingredient=${encodeURIComponent(ingredient)}`
+  );
+
+  const data = await response.json();
+
+  setRecipes(
+    data.recipes.map((recipe: any) => ({
+      id: recipe.id,
+      title: recipe.title,
+      image: recipe.image,
+      tag: recipe.category ?? 'Recipe',
+      cuisine: recipe.cuisine ?? 'Unknown cuisine',
+    }))
+  );
+}
+
   const visibleRecipes = useMemo(() => {
-  return recipes.filter((recipe) => {
-    const matchesFilter =
-      activeFilter === 'All recipes' ||
-      recipe.tag === activeFilter;
+    return [...recipes].sort((a, b) => {
+      if (sortOrder === 'az') {
+        return a.title.localeCompare(b.title);
+      }
 
-    return matchesFilter;
-  });
-}, [recipes, activeFilter]);
+      return b.title.localeCompare(a.title);
+    });
+  }, [recipes, sortOrder]);
+  useEffect(() => {
+    const savedFavorites = JSON.parse(
+      localStorage.getItem('favorites') || '[]'
+    );
 
-useEffect(() => {
-  const savedFavorites = JSON.parse(
-    localStorage.getItem('favorites') || '[]'
-  );
-
-  setFavoriteIds(
-    savedFavorites.map((recipe: any) => recipe.id)
-  );
-}, []);
+    setFavoriteIds(
+      savedFavorites.map((recipe: any) => recipe.id)
+    );
+  }, []);
 
 function handleFavorite(recipe: any) {
   const existingFavorites = JSON.parse(
@@ -185,9 +220,13 @@ function handleFavorite(recipe: any) {
                     type="button"
                     className={selectedIngredient === item ? 'chip active' : 'chip'}
                     onClick={() => {
-                      setSelectedIngredient(item);
-                      setQuery(item);
-                      handleSearch(item);
+                      if (selectedIngredient === item) {
+                        setSelectedIngredient(null);
+                      } else {
+                        setSelectedIngredient(item);
+                        setActiveFilter('All recipes');
+                        handleIngredientSearch(item);
+                      }
                     }}
                   >
                     {item}
@@ -212,9 +251,16 @@ function handleFavorite(recipe: any) {
                 <span>{visibleRecipes.length} recipes found</span>
               </div>
 
-              <button type="button" className="sort-btn">
-                Sort: Community favorites ▾
-              </button>
+              <select
+                className="sort-btn"
+                value={sortOrder}
+                onChange={(event) =>
+                  setSortOrder(event.target.value as 'az' | 'za')
+                }
+              >
+                <option value="az">Sort: A–Z</option>
+                <option value="za">Sort: Z–A</option>
+              </select>
             </div>
 
             <div className="filters-row">
@@ -222,8 +268,12 @@ function handleFavorite(recipe: any) {
                 <button
                   key={pill}
                   type="button"
-                  className={activeFilter === pill ? 'filter-pill selected' : 'filter-pill'}
-                  onClick={() => setActiveFilter(pill)}
+                  className={
+                    activeFilter === pill
+                      ? 'filter-pill selected'
+                      : 'filter-pill'
+                  }
+                  onClick={() => handleCategory(pill)}
                 >
                   {pill}
                 </button>
