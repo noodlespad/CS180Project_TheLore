@@ -18,13 +18,58 @@ type Recipe = {
 const filterPills = ['All recipes', 'Breakfast', 'Seafood', 'Chicken', 'Dessert', 'Vegetarian'];
 const kitchenIngredients = ['Eggs', 'Rice', 'Pasta', 'Spinach', 'Beans', 'Cheese'];
 
-  export default function HomePage() {
-  const [query, setQuery] = useState('');
-  const [recipes, setRecipes] = useState<Recipe[]>([]);
-  const [activeFilter, setActiveFilter] = useState<string | null>('All recipes');
-  const [selectedIngredient, setSelectedIngredient] = useState<string | null>(null);
-  const [favoriteIds, setFavoriteIds] = useState<string[]>([]);
-  const [sortOrder, setSortOrder] = useState<'az' | 'za'>('az');
+export default function HomePage() {
+const [query, setQuery] = useState('');
+const [recipes, setRecipes] = useState<Recipe[]>([]);
+const [activeFilter, setActiveFilter] = useState<string | null>('All recipes');
+const [selectedIngredient, setSelectedIngredient] = useState<string | null>(null);
+const [favoriteIds, setFavoriteIds] = useState<string[]>([]);
+const [sortOrder, setSortOrder] = useState<'az' | 'za'>('az');
+const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+  async function loadFavorites() {
+    try {
+      const response = await fetch('/api/favorites');
+
+      if (!response.ok) {
+        setFavoriteIds([]);
+        return;
+      }
+
+      const data = await response.json();
+
+      setFavoriteIds(
+        (data.favorites ?? []).map((id: string) => String(id))
+      );
+    } catch (error) {
+      console.error('Could not load favorites:', error);
+      setFavoriteIds([]);
+    }
+  }
+
+  loadFavorites();
+  }, []);
+
+  useEffect(() => {
+    async function loadUser() {
+      try {
+        const response = await fetch('/api/auth/me');
+
+        if (!response.ok) {
+          setUser(null);
+          return;
+        }
+
+        const data = await response.json();
+        setUser(data.user);
+      } catch {
+        setUser(null);
+      }
+    }
+
+    loadUser();
+  }, []);
 
   async function handleCategory(category: string) {
   setActiveFilter(category);
@@ -108,33 +153,35 @@ const kitchenIngredients = ['Eggs', 'Rice', 'Pasta', 'Spinach', 'Beans', 'Cheese
     );
   }, []);
 
-function handleFavorite(recipe: any) {
-  const existingFavorites = JSON.parse(
-    localStorage.getItem('favorites') || '[]'
-  );
+async function handleFavorite(recipeId: string) {
+  const id = String(recipeId);
+  const alreadySaved = favoriteIds.includes(recipeId);
 
-  const alreadySaved = existingFavorites.some(
-    (favorite: any) => favorite.id === recipe.id
-  );
+  try {
+    const response = await fetch('/api/favorites', {
+      method: alreadySaved ? 'DELETE' : 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        mealdbId: recipeId,
+      }),
+    });
 
-  let updatedFavorites;
+    if (!response.ok) {
+      const data = await response.json();
+      console.error('Favorite failed:', data);
+      return;
+    }
 
-  if (alreadySaved) {
-    updatedFavorites = existingFavorites.filter(
-      (favorite: any) => favorite.id !== recipe.id
+    setFavoriteIds((current) =>
+      alreadySaved
+        ? current.filter((id) => id !== recipeId)
+        : [...current, recipeId]
     );
-  } else {
-    updatedFavorites = [...existingFavorites, recipe];
+  } catch (error) {
+    console.error('Could not update favorite:', error);
   }
-
-  localStorage.setItem(
-    'favorites',
-    JSON.stringify(updatedFavorites)
-  );
-
-  setFavoriteIds(
-    updatedFavorites.map((favorite: any) => favorite.id)
-  );
 }
 
   return (
@@ -149,18 +196,38 @@ function handleFavorite(recipe: any) {
 
         <nav className="top-nav" aria-label="Main navigation">
           <Link href="/">Explore recipes</Link>
-          <Link href="/favorites">Favorites</Link>
+          <Link href="/favorites">Saved recipes</Link>
           <Link href="/cart">Shopping List</Link>
           <Link href="/recipes/new">Post a recipe</Link>
         </nav>
 
         <div className="header-actions">
-          <Link href="/login" className="ghost-btn">
-            Log in
-          </Link>
-          <Link href="/signup" className="dark-btn">
-            Join the table
-          </Link>
+          {user ? (
+            <Link href="/profile" className="profile-header-link">
+              <span className="mini-user">
+                Hi, {user.displayName}
+              </span>
+
+              <span className="panel-avatar">
+                {user.displayName
+                  .split(' ')
+                  .map((part: string) => part[0])
+                  .join('')
+                  .slice(0, 2)
+                  .toUpperCase()}
+              </span>
+            </Link>
+          ) : (
+            <>
+              <Link href="/login" className="ghost-btn">
+                Log in
+              </Link>
+
+              <Link href="/signup" className="dark-btn">
+                Join the table
+              </Link>
+            </>
+          )}
         </div>
       </header>
 
@@ -315,10 +382,11 @@ function handleFavorite(recipe: any) {
                           className="favorite-btn"
                           onClick={(event) => {
                             event.preventDefault();
-                            handleFavorite(recipe);
+                            event.stopPropagation();
+                            handleFavorite(recipe.id);
                           }}
                         >
-                          {favoriteIds.includes(recipe.id) ? '♥' : '♡'}
+                          {favoriteIds.includes(String(recipe.id)) ? '♥' : '♡'}
                         </button>
                       </div>
                     </div>

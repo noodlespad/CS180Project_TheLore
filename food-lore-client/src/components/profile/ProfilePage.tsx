@@ -1,3 +1,10 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+
+import Link from "next/dist/client/link";
+import { useRouter } from 'next/navigation';
+
 type ProfileRecipe = {
   id: number;
   title: string;
@@ -9,43 +16,142 @@ type ProfileRecipe = {
   comments: number;
 };
 
-const profileRecipes: ProfileRecipe[] = [
-  {
-    id: 1,
-    title: 'One pot tomato & spinach pasta',
-    description: 'A cozy dinner with just one pot to wash.',
-    time: '20 min',
-    level: 'Beginner',
-    tag: 'One pot',
-    image:
-      'https://images.unsplash.com/photo-1555949258-eb67b1ef0ceb?auto=format&fit=crop&w=900&q=80',
-    comments: 12,
-  },
-  {
-    id: 2,
-    title: 'Peanut butter banana oats',
-    description: 'An easy breakfast for busy mornings.',
-    time: '10 min',
-    level: 'Beginner',
-    tag: 'Breakfast',
-    image:
-      'https://cdn.apartmenttherapy.info/image/upload/f_auto,q_auto:eco,c_fill,g_auto,w_1220,h_915/k%2FPhoto%2FRecipes%2F2021-09-peanut-butter-oatmeal%2F2021-09-13_ATK6875?auto=format&fit=crop&w=900&q=80',
-    comments: 4,
-  },
-  {
-    id: 3,
-    title: 'Jammy eggs on avocado toast',
-    description: 'A simple café-style breakfast at home.',
-    time: '12 min',
-    level: 'Beginner',
-    tag: 'Breakfast',
-    image:
-      'https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=900&q=80',
-    comments: 7,
-  },
-];
+type User = {
+  id: string;
+  displayName: string;
+  username: string;
+  email: string;
+};
+
 
 export default function ProfilePage() {
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [favoriteIds, setFavoriteIds] = useState<string[]>([]);
+  const [savedRecipes, setSavedRecipes] = useState<any[]>([]);
+  const [activeTab, setActiveTab] =
+    useState<'my' | 'saved' | 'drafts'>('my');
+
+  const router = useRouter();
+
+  async function handleLogout() {
+    try {
+      const response = await fetch('/api/auth/logout', {
+        method: 'POST',
+      });
+
+      if (!response.ok) {
+        throw new Error('Logout failed');
+      }
+
+      router.push('/');
+      router.refresh();
+    } catch (error) {
+      console.error('Could not log out:', error);
+    }
+  }
+
+  // Load logged-in user
+  useEffect(() => {
+    async function loadUser() {
+      try {
+        const response = await fetch('/api/auth/me');
+
+        if (!response.ok) {
+          setUser(null);
+          return;
+        }
+
+        const data = await response.json();
+        setUser(data.user);
+      } catch (error) {
+        console.error('Could not load profile user:', error);
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadUser();
+  }, []);
+
+  // Load favorite IDs from Neon
+  useEffect(() => {
+    async function loadFavorites() {
+      try {
+        const response = await fetch('/api/favorites');
+
+        console.log('favorites response status:', response.status);
+
+        const data = await response.json();
+
+        console.log('favorites response data:', data);
+
+        if (!response.ok) {
+          setFavoriteIds([]);
+          return;
+        }
+
+        setFavoriteIds(data.favorites ?? []);
+      } catch (error) {
+        console.error('Could not load favorites:', error);
+        setFavoriteIds([]);
+      }
+    }
+
+    loadFavorites();
+  }, []);
+
+  // Load recipe details for saved IDs
+useEffect(() => {
+  async function loadSavedRecipes() {
+    console.log('favoriteIds:', favoriteIds);
+
+    if (favoriteIds.length === 0) {
+      setSavedRecipes([]);
+      return;
+    }
+
+    try {
+      const results = await Promise.all(
+        favoriteIds.map(async (id) => {
+          console.log('loading MealDB recipe:', id);
+
+          const response = await fetch(
+            `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`
+          );
+
+          if (!response.ok) {
+            console.error('MealDB failed for:', id);
+            return null;
+          }
+
+          const data = await response.json();
+
+          return data.meals?.[0] ?? null;
+        })
+      );
+
+      console.log('saved recipe results:', results);
+
+      setSavedRecipes(results.filter(Boolean));
+    } catch (error) {
+      console.error('Could not load saved recipes:', error);
+      setSavedRecipes([]);
+    }
+  }
+
+  loadSavedRecipes();
+}, [favoriteIds]);
+
+  if (loading) {
+    return <div>Loading profile...</div>;
+  }
+
+  if (!user) {
+    return <div>You need to log in to view your profile.</div>;
+  }
+
   return (
     <div className="foodlore-app">
       <header className="foodlore-header">
@@ -57,14 +163,22 @@ export default function ProfilePage() {
         </div>
 
         <nav className="top-nav" aria-label="Main navigation">
-          <a href="#">Explore recipes</a>
-          <a href="/recipes">Shopping List</a>
-          <a href="#">Post a recipe</a>
+          <Link href="/">Explore recipes</Link>
+          <Link href="/favorites">Saved recipes</Link>
+          <Link href="/cart">Shopping List</Link>
+          <Link href="/recipes/new">Post a recipe</Link>
         </nav>
 
         <div className="profile-user">
-          <span>Hi, Maya</span>
-          <span className="header-avatar">MC</span>
+          <span>Hi, {user.displayName}</span>
+          <span className="header-avatar">
+            {user.displayName
+              .split(' ')
+              .map((part) => part[0])
+              .join('')
+              .slice(0, 2)
+              .toUpperCase()}
+          </span>
           <span className="profile-chevron">⌄</span>
         </div>
       </header>
@@ -75,23 +189,29 @@ export default function ProfilePage() {
 
           <div className="profile-links">
             <a href="#">Account settings</a>
-            <a href="#">Log out</a>
+            <button type="button" onClick={handleLogout}>
+              Log out
+            </button>
           </div>
         </div>
 
         <section className="profile-card">
-          <div className="profile-avatar">MC</div>
+          <div className="profile-avatar">
+            <span className="profile-avatar">
+              {user.displayName
+                .split(' ')
+                .map((part) => part[0])
+                .join('')
+                .slice(0, 2)
+                .toUpperCase()}
+            </span>
+          </div>
 
           <div className="profile-details">
             <div className="profile-name">
-              <h1>Maya Chen</h1>
-              <span>@mayacooks</span>
+              <h1>{user.displayName}</h1>
+              <span>@{user.username}</span>
             </div>
-
-            <p>
-              Student, pasta enthusiast, and still figuring out my tiny kitchen.
-              Sharing quick vegetarian meals that get me through busy weeks.
-            </p>
 
             <span className="profile-member">
               At the table since September 2026
@@ -126,7 +246,7 @@ export default function ProfilePage() {
             <span className="stat-icon">♡</span>
 
             <div>
-              <strong>8</strong>
+              <strong>{favoriteIds.length}</strong>
               <p>Recipes saved</p>
             </div>
           </article>
@@ -135,12 +255,28 @@ export default function ProfilePage() {
         <section className="profile-recipes">
           <div className="profile-tabs-row">
             <div className="profile-tabs">
-              <button className="profile-tab active" type="button">
-                My recipes (3)
+              <button
+                className={activeTab === 'my' ? 'profile-tab active' : 'profile-tab'}
+                type="button"
+                onClick={() => setActiveTab('my')}
+              >
+                My recipes
               </button>
 
-              <button className="profile-tab" type="button">
-                Saved recipes (8)
+              <button
+                className={activeTab === 'saved' ? 'profile-tab active' : 'profile-tab'}
+                type="button"
+                onClick={() => setActiveTab('saved')}
+              >
+                Saved recipes ({favoriteIds.length})
+              </button>
+
+              <button
+                className={activeTab === 'drafts' ? 'profile-tab active' : 'profile-tab'}
+                type="button"
+                onClick={() => setActiveTab('drafts')}
+              >
+                Drafts
               </button>
 
               <button className="profile-tab" type="button">
@@ -162,49 +298,43 @@ export default function ProfilePage() {
             </p>
           </div>
 
-          <div className="profile-recipe-grid">
-            {profileRecipes.map((recipe) => (
-              <article className="profile-recipe-card" key={recipe.id}>
-                <div className="profile-recipe-image">
-                  <img src={recipe.image} alt={recipe.title} />
-
-                  <span className="profile-recipe-tag">
-                    {recipe.tag}
-                  </span>
-
-                  <button
-                    className="profile-recipe-menu"
-                    type="button"
-                    aria-label={`Options for ${recipe.title}`}
+          {activeTab === 'saved' && (
+            <div className="profile-recipe-grid">
+              {savedRecipes.length === 0 ? (
+                <p>No saved recipes yet.</p>
+              ) : (
+                savedRecipes.map((recipe) => (
+                  <Link
+                    key={recipe.idMeal}
+                    href={`/recipes/${recipe.idMeal}`}
+                    className="recipe-card-link"
                   >
-                    •••
-                  </button>
-                </div>
+                    <article className="profile-recipe-card">
+                      <div className="profile-recipe-image">
+                        <img
+                          src={recipe.strMealThumb}
+                          alt={recipe.strMeal}
+                        />
 
-                <div className="profile-recipe-body">
-                  <h3>{recipe.title}</h3>
+                        <span className="profile-recipe-tag">
+                          {recipe.strCategory}
+                        </span>
+                      </div>
 
-                  <p className="profile-recipe-description">
-                    {recipe.description}
-                  </p>
+                      <div className="profile-recipe-body">
+                        <h3>{recipe.strMeal}</h3>
 
-                  <div className="profile-recipe-meta">
-                    <span>{recipe.time}</span>
-                    <span>{recipe.level}</span>
-                  </div>
-
-                  <div className="profile-recipe-footer">
-                    <div className="profile-recipe-author">
-                      <span className="recipe-avatar">MC</span>
-                      <span>Maya Chen</span>
-                    </div>
-
-                    <span>◯ {recipe.comments}</span>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
+                        <div className="profile-recipe-meta">
+                          <span>{recipe.strCategory}</span>
+                          {recipe.strArea && <span>{recipe.strArea}</span>}
+                        </div>
+                      </div>
+                    </article>
+                  </Link>
+                ))
+              )}
+            </div>
+          )}
 
           <div className="draft-card">
             <div className="draft-info">

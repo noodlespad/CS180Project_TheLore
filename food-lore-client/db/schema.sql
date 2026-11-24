@@ -24,7 +24,7 @@ CREATE INDEX IF NOT EXISTS sessions_user_id_idx
 CREATE INDEX IF NOT EXISTS sessions_expires_at_idx
     ON sessions(expires_at);
 
-CREATE TABLE favorites (
+CREATE TABLE IF NOT EXISTS favorites (
     id BIGSERIAL PRIMARY KEY,
     user_id BIGINT NOT NULL
         REFERENCES users(id) ON DELETE CASCADE,
