@@ -610,38 +610,57 @@ img { display: block; max-width: 100%; }
   font-size: 0.9rem;
 }
 
-.recipe-header {
-  padding-left: 0;
-  padding-right: 0;
-}
-
 .profile-header-link {
   display: flex;
   align-items: center;
   gap: 12px;
   text-decoration: none;
   color: inherit;
+  cursor: pointer;
 }
 
+.profile-header-link:hover .mini-user {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  color: #bd674d;
+}
+
+.profile-header-link:hover .panel-avatar {
+  background: #e8cdbf;
+  transform: translateY(-1px);
+}
+
+.recipe-header {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+
 .mini-user {
-  display: inline-block;
-  white-space: nowrap;
-  font-weight: 500;
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  font-size: 13px;
+  background: none;
+  color: #2f4737;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .panel-avatar {
-  width: 46px;
-  height: 46px;
+  background: #f5e4da;
+  color: #bd674d;
   border-radius: 50%;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: #f3ded2;
-  color: #b86448;
+  width: 34px;
+  height: 34px;
+  font-size: 10px;
   font-weight: 700;
-  flex-shrink: 0;
-  font-weight: 700;
-  background: #f3ded2;
 }
 
 .recipe-hero {

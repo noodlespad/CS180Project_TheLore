@@ -159,7 +159,9 @@ useEffect(() => {
           <span className="brand-mark" aria-hidden="true">
             ♡
           </span>
-          <span className="brand-name">food lore.</span>
+          <span className="brand-name">
+            <Link href="/">food lore.</Link>
+          </span>
         </div>
 
         <nav className="top-nav" aria-label="Main navigation">
@@ -169,9 +171,12 @@ useEffect(() => {
           <Link href="/recipes/new">Post a recipe</Link>
         </nav>
 
-        <div className="profile-user">
-          <span>Hi, {user.displayName}</span>
-          <span className="header-avatar">
+        <Link href="/profile" className="profile-header-link">
+          <span className="mini-user">
+            Hi, {user.displayName}
+          </span>
+
+          <span className="panel-avatar">
             {user.displayName
               .split(' ')
               .map((part) => part[0])
@@ -179,8 +184,7 @@ useEffect(() => {
               .slice(0, 2)
               .toUpperCase()}
           </span>
-          <span className="profile-chevron">⌄</span>
-        </div>
+        </Link>
       </header>
 
       <main className="profile-shell">
@@ -212,15 +216,11 @@ useEffect(() => {
               <h1>{user.displayName}</h1>
               <span>@{user.username}</span>
             </div>
-
-            <span className="profile-member">
-              At the table since September 2026
-            </span>
           </div>
 
-          <button className="edit-profile-button" type="button">
+          <Link href="/profile/edit" className="edit-profile-button">
             ✎ Edit profile
-          </button>
+          </Link>
         </section>
 
         <section className="profile-stats">
@@ -277,10 +277,6 @@ useEffect(() => {
                 onClick={() => setActiveTab('drafts')}
               >
                 Drafts
-              </button>
-
-              <button className="profile-tab" type="button">
-                Drafts (1)
               </button>
             </div>
 

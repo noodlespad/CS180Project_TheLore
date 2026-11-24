@@ -191,7 +191,9 @@ async function handleFavorite(recipeId: string) {
           <span className="brand-mark" aria-hidden="true">
             ♡
           </span>
-          <span className="brand-name">food lore.</span>
+          <span className="brand-name">
+            <Link href="/">food lore.</Link>
+          </span>
         </div>
 
         <nav className="top-nav" aria-label="Main navigation">
