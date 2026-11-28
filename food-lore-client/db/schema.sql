@@ -23,3 +23,17 @@ CREATE INDEX IF NOT EXISTS sessions_user_id_idx
 
 CREATE INDEX IF NOT EXISTS sessions_expires_at_idx
     ON sessions(expires_at);
+
+CREATE TABLE IF NOT EXISTS cart_items (
+    id BIGSERIAL PRIMARY KEY,
+    user_id BIGINT NOT NULL
+        REFERENCES users(id) ON DELETE CASCADE,
+    name VARCHAR(255) NOT NULL,
+    quantity VARCHAR(100),
+    is_purchased BOOLEAN NOT NULL DEFAULT FALSE,
+    is_optional BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS cart_items_user_id_idx
+    ON cart_items(user_id);
