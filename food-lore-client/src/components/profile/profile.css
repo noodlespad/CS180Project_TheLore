@@ -10,7 +10,8 @@
 }
 
 .profile-nav a,
-.profile-links a {
+.profile-links a,
+.profile-links button {
   color: #747a73;
   text-decoration: none;
   font-size: 13px;
@@ -24,7 +25,35 @@
   font-size: 13px;
 }
 
-.header-avatar,
+.profile-header-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.mini-user{
+  background: none;
+  color: #2f4737;
+}
+
+.profile-header-link .panel-avatar {
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.profile-header-link:hover .mini-user {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  color: #bd674d;
+}
+
+.profile-header-link:hover .panel-avatar {
+  background: #e8cdbf;
+  transform: translateY(-1px);
+}
+
 .profile-avatar,
 .recipe-avatar {
   background: #f5e4da;
@@ -33,17 +62,6 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-}
-
-.header-avatar {
-  width: 34px;
-  height: 34px;
-  font-size: 10px;
-  font-weight: 700;
-}
-
-.profile-chevron {
-  color: #8b8d87;
 }
 
 .profile-shell {

@@ -136,9 +136,10 @@ return(
         </div>
 
         <nav className="top-nav" aria-label="Main navigation">
-            <a href="#">Explore recipes</a>
-            <a href="#">Shopping list</a>
-            <a href="#">Post a recipe</a>
+          <Link href="/">Explore recipes</Link>
+          <Link href="/favorites">Favorites</Link>
+          <Link href="/shopping-list">Shopping List</Link>
+          <Link href="/recipes/new">Post a recipe</Link>
         </nav>
 
         <div className="header-actions">
